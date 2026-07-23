@@ -1,237 +1,249 @@
-import { useEffect, useRef, useState } from "react";
-import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./App.css";
 
-gsap.registerPlugin(ScrollTrigger);
-
 const projects = [
-  {
-    title: "Campaign 01",
-    type: "Visual Identity",
-    img: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=900",
-  },
-  {
-    title: "Culture Drop",
-    type: "Creative Direction",
-    img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900",
-  },
-  {
-    title: "Undo Lab",
-    type: "Digital Experiment",
-    img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900",
-  },
-  {
-    title: "Story System",
-    type: "Brand Experience",
-    img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=900",
-  },
+  { title: "Kopi Sippio", type: "Branding" },
+  { title: "Between Buns", type: "Branding" },
+  { title: "Nexora Systems", type: "Logo" },
+  { title: "Kopi Sippio", type: "Branding" },
+  { title: "Between Buns", type: "Branding" },
+  { title: "Nexora Systems", type: "Logo" },
+  { title: "Kopi Sippio", type: "Branding" },
+  { title: "Between Buns", type: "Branding" },
+  { title: "Nexora Systems", type: "Logo" },
 ];
 
-function App() {
-  const previewRef = useRef(null);
-  const [introDone, setIntroDone] = useState(false);
+function Navbar() {
+  return (
+    <nav className="navbar">
+      <img src="/logo.png" alt="Undo Culture" className="logo" />
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
+      <div className="nav-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/projects">Projects</a>
+        <a href="/contact" className="contact-btn">
+          Get in touch <span>→</span>
+        </a>
+      </div>
+    </nav>
+  );
+}
 
-    const introTl = gsap.timeline({
-      onComplete: () => {
-        setIntroDone(true);
-        document.body.style.overflow = "auto";
+function Footer() {
+  return (
+    <footer className="footer">
+      <div>
+        <p>Undo Culture.</p>
+        <p>
+          TinkerSpace, Kalamassery,
+          <br />
+          Kochi.
+        </p>
+      </div>
 
-        gsap.fromTo(
-          ".hero-line span",
-          { y: "120%" },
-          {
-            y: "0%",
-            stagger: 0.15,
-            duration: 1.4,
-            ease: "power4.out",
-          }
-        );
-      },
-    });
+      <div className="footer-right">
+        <p>+91 9544284196</p>
+        <p>undoculture@gmail.com</p>
+        <p>Instagram&nbsp; LinkedIn&nbsp; Behance</p>
+      </div>
+    </footer>
+  );
+}
 
-    introTl
-      .fromTo(
-        ".intro-word",
-        { y: 80, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.18,
-          duration: 0.8,
-          ease: "power4.out",
-        }
-      )
-      .to(".intro-word", {
-        y: -80,
-        opacity: 0,
-        stagger: 0.08,
-        duration: 0.6,
-        ease: "power4.in",
-        delay: 0.4,
-      })
-      .to(".intro-loader", {
-        y: "-100%",
-        duration: 1,
-        ease: "power4.inOut",
-      });
-
-    return () => {
-      introTl.kill();
-      document.body.style.overflow = "auto";
-    };
-  }, []);
-
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.08,
-      smoothWheel: true,
-    });
-
-    let rafId;
-
-    function raf(time) {
-      lenis.raf(time);
-      ScrollTrigger.update();
-      rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
-
-    gsap.utils.toArray(".reveal").forEach((el) => {
-      gsap.fromTo(
-        el,
-        { y: 80, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-          },
-        }
-      );
-    });
-
-    return () => {
-      lenis.destroy();
-      cancelAnimationFrame(rafId);
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
-
-  const movePreview = (e, img) => {
-    const preview = previewRef.current;
-    if (!preview) return;
-
-    preview.style.opacity = 1;
-    preview.style.backgroundImage = `url(${img})`;
-    preview.style.transform = `translate(${e.clientX + 25}px, ${
-      e.clientY - 120
-    }px)`;
-  };
-
-  const hidePreview = () => {
-    if (!previewRef.current) return;
-    previewRef.current.style.opacity = 0;
-  };
-
+function Home() {
   return (
     <>
-      {!introDone && (
-        <div className="intro-loader">
-          <h1 className="intro-word">UNDO</h1>
-          <h1 className="intro-word">CULTURE</h1>
-          <h1 className="intro-word outline">UNDO</h1>
-          <h1 className="intro-word outline">CULTURE</h1>
-        </div>
-      )}
+      <Navbar />
 
-      <main>
-        <div className="cursor-preview" ref={previewRef}></div>
-
-        <nav className="nav">
-          <img src="/logo.png" alt="Undo Culture" className="logo" />
-
-          <div>
-            <a href="#work">Work</a>
-            <a href="#info">Info</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </nav>
-
-        <section className="hero">
-          <h1 className="hero-title">
-            <div className="hero-line">
-              <span>UNDO</span>
-            </div>
-
-            <div className="hero-line">
-              <span>CULTURE</span>
-            </div>
+      <section className="hero-box">
+        <div>
+          <h1>
+            <span>Undo</span> the
+            <br />
+            ordinary<span>.</span>
           </h1>
+        </div>
 
-          <p className="hero-desc">
-            Undo Culture is a creative space for bold visuals, stories,
-            experiments and meaningful digital experiences.
-          </p>
-        </section>
+        <ul>
+          <li>Branding</li>
+          <li>UI/UX Designs</li>
+          <li>Social Media Creatives</li>
+          <li>Posters</li>
+        </ul>
+      </section>
 
-        <section className="intro reveal" id="info">
-          <p>
-            We blend design, culture, motion and storytelling to create visual
-            experiences that feel bold, emotional and unforgettable.
-          </p>
-        </section>
+      <section className="marquee">
+        <div>
+          <span>BETWEEN BUNS</span>
+          <span>BETWEEN BUNS</span>
+          <span>BETWEEN BUNS</span>
+          <span>BETWEEN BUNS</span>
+          <span>BETWEEN BUNS</span>
+        </div>
+      </section>
 
-        <section className="work" id="work">
-          <div className="section-head reveal">
-            <p>Selected</p>
-            <h2>Work</h2>
-          </div>
+      <section className="intro-text">
+        <p>
+          We are a creative design agency committed to crafting impactful visual
+          experiences and delivering diverse design solutions that build
+          memorable brands across the globe.
+        </p>
+      </section>
 
-          {projects.map((project, index) => (
-            <div
-              className="project reveal"
-              key={project.title}
-              onMouseMove={(e) => movePreview(e, project.img)}
-              onMouseLeave={hidePreview}
-            >
-              <span>0{index + 1}</span>
+      <section className="featured-projects">
+        <p>Projects</p>
+        <h2>We did these</h2>
+
+        <div className="project-grid dark">
+          {projects.slice(0, 6).map((project, index) => (
+            <div className="project-card" key={index}>
+              <div className="project-img"></div>
               <h3>{project.title}</h3>
               <p>{project.type}</p>
             </div>
           ))}
-        </section>
+        </div>
 
-        <section className="skills reveal">
-          <h2>Services</h2>
+        <a className="view-more" href="/projects">
+          View More ↓
+        </a>
+      </section>
 
-          <div>
-            <span>Brand Identity</span>
-            <span>Creative Direction</span>
-            <span>Social Media Design</span>
-            <span>Campaign Design</span>
-            <span>Motion Graphics</span>
-            <span>Web Experiences</span>
-            <span>Visual Storytelling</span>
-          </div>
-        </section>
+      <section className="story-section">
+        <div>
+          <p>Projects</p>
+          <h2>
+            Designs that
+            <br />
+            tells stories.
+          </h2>
+        </div>
 
-        <section className="contact reveal" id="contact">
-          <p>Available for collaborations</p>
-          <h2>Let’s build culture, visually.</h2>
-          <a href="mailto:yourmail@gmail.com">yourmail@gmail.com</a>
-        </section>
-      </main>
+        <div>
+          <p>
+            Lorem ipsum dolor sit amet. Sit iste necessitatibus ut recusandae
+            corrupti eos sunt officiis sit possimus vero?
+          </p>
+          <a href="/about">Read About us →</a>
+        </div>
+      </section>
+
+      <Footer />
     </>
   );
+}
+
+function Projects() {
+  return (
+    <>
+      <Navbar />
+
+      <main className="page">
+        <h1 className="page-title center">Projects</h1>
+
+        <div className="project-grid">
+          {projects.map((project, index) => (
+            <div className="project-card" key={index}>
+              <div className="project-img"></div>
+              <h3>{project.title}</h3>
+              <p>{project.type}</p>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
+
+function About() {
+  return (
+    <>
+      <Navbar />
+
+      <main className="about-page">
+        <p className="label">About</p>
+        <h1>
+          Designs that
+          <br />
+          tells stories.
+        </h1>
+
+        <p className="about-text">
+          Undo Culture is a creative design company focused on building strong
+          and meaningful visual identities for brands, companies, and modern
+          businesses. The studio combines strategy, aesthetics, and storytelling
+          to create designs that are visually distinctive and emotionally
+          memorable.
+        </p>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
+
+function Contact() {
+  return (
+    <>
+      <Navbar />
+
+      <main className="contact-page">
+        <h1>Get in touch.</h1>
+
+        <form className="contact-form">
+          <textarea placeholder="Tell what you need us to create...*" />
+
+          <div>
+            <input type="email" placeholder="email*" />
+            <input type="text" placeholder="phone number" />
+
+            <button type="button">
+              Send <span>→</span>
+            </button>
+          </div>
+        </form>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
+
+function ProjectDetail() {
+  return (
+    <>
+      <Navbar />
+
+      <main className="detail-page">
+        <p className="label">Project</p>
+        <h1>Between Buns</h1>
+        <p>
+          Lorem ipsum dolor sit amet. Sit iste necessitatibus ut recusandae
+          corrupti eos sunt officiis sit possimus vero?
+        </p>
+
+        <div className="large-img"></div>
+        <div className="large-img"></div>
+        <div className="large-img"></div>
+        <div className="large-img"></div>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
+
+function App() {
+  const path = window.location.pathname;
+
+  if (path === "/about") return <About />;
+  if (path === "/projects") return <Projects />;
+  if (path === "/contact") return <Contact />;
+  if (path === "/project/between-buns") return <ProjectDetail />;
+
+  return <Home />;
 }
 
 export default App;
