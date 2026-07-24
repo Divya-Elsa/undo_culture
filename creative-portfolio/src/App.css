@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Mark Pro";
+  src: url("/fonts/Mark Pro.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -7,12 +15,19 @@
 body {
   background: #f7f7f5;
   color: #052d2f;
-  font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+  font-family: "Mark Pro", Arial, sans-serif;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+.page-title {
+  font-family: "Figtree", "Arial Rounded MT Bold", Arial, sans-serif;
 }
 
 .navbar {
@@ -39,6 +54,7 @@ a {
 }
 
 .nav-links a:hover,
+.nav-links a.active,
 .label,
 .page-title,
 .featured-projects > p,
@@ -205,10 +221,17 @@ button span {
 }
 
 .about-page,
-.contact-page,
 .detail-page {
   padding: 110px 10%;
   min-height: 900px;
+}
+
+.contact-page {
+  padding: 60px 10%;
+}
+
+.contact-page + .footer {
+  margin: 40px 6% 24px;
 }
 
 .about-page h1 {
@@ -224,7 +247,7 @@ button span {
 .contact-page h1 {
   color: #45b8b2;
   font-size: 54px;
-  margin-bottom: 90px;
+  margin-bottom: 50px;
 }
 
 .contact-form {
@@ -245,12 +268,17 @@ input {
 }
 
 textarea {
-  height: 270px;
+  height: 255px;
   resize: none;
 }
 
 input {
   margin-bottom: 18px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 16px;
 }
 
 button {

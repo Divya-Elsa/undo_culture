@@ -13,14 +13,22 @@ const projects = [
 ];
 
 function Navbar() {
+  const path = window.location.pathname;
+
   return (
     <nav className="navbar">
       <img src="/logo.png" alt="Undo Culture" className="logo" />
 
       <div className="nav-links">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/projects">Projects</a>
+        <a href="/" className={path === "/" ? "active" : ""}>
+          Home
+        </a>
+        <a href="/about" className={path === "/about" ? "active" : ""}>
+          About
+        </a>
+        <a href="/projects" className={path === "/projects" ? "active" : ""}>
+          Projects
+        </a>
         <a href="/contact" className="contact-btn">
           Get in touch <span>→</span>
         </a>
@@ -199,9 +207,14 @@ function Contact() {
             <input type="email" placeholder="email*" />
             <input type="text" placeholder="phone number" />
 
-            <button type="button">
-              Send <span>→</span>
-            </button>
+            <div className="form-buttons">
+              <button type="button">
+                Send <span>→</span>
+              </button>
+              <button type="button">
+                Sent <span>✓</span>
+              </button>
+            </div>
           </div>
         </form>
       </main>

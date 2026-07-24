@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Licensed fonts (not for public redistribution)
+public/fonts/
