@@ -33,12 +33,17 @@ h3,
 .navbar {
   width: calc(100% - 48px);
   margin: 28px auto;
-  padding: 24px 90px;
+  padding: 24px clamp(24px, 6vw, 90px);
   background: #062f31;
   border-radius: 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.navbar--merged {
+  margin-bottom: 0;
+  border-radius: 28px 28px 0 0;
 }
 
 .logo {
@@ -80,8 +85,8 @@ button span {
 .hero-box {
   width: calc(100% - 48px);
   margin: 0 auto 28px;
-  min-height: 540px;
-  padding: 150px 110px;
+  min-height: clamp(420px, 45vw, 540px);
+  padding: clamp(60px, 12vw, 150px) clamp(30px, 8vw, 110px);
   background: #062f31;
   border-radius: 0 0 24px 24px;
   color: white;
@@ -91,7 +96,7 @@ button span {
 }
 
 .hero-box h1 {
-  font-size: 78px;
+  font-size: clamp(40px, 6vw, 78px);
   line-height: 0.95;
 }
 
@@ -101,7 +106,7 @@ button span {
 
 .hero-box ul {
   list-style: none;
-  font-size: 30px;
+  font-size: clamp(18px, 2.2vw, 30px);
   line-height: 1.8;
 }
 
@@ -117,14 +122,14 @@ button span {
 .marquee div {
   display: flex;
   justify-content: space-around;
-  font-size: 32px;
+  font-size: clamp(18px, 2.4vw, 32px);
   font-weight: 900;
   color: #062f31;
 }
 
 .intro-text {
-  padding: 70px 10%;
-  font-size: 28px;
+  padding: clamp(40px, 7vw, 70px) 10%;
+  font-size: clamp(18px, 2vw, 28px);
   max-width: 900px;
 }
 
@@ -132,13 +137,13 @@ button span {
   background: #062f31;
   color: white;
   text-align: center;
-  padding: 90px 10%;
+  padding: clamp(50px, 8vw, 90px) 10%;
   position: relative;
 }
 
 .featured-projects h2 {
-  font-size: 54px;
-  margin-bottom: 90px;
+  font-size: clamp(32px, 4.5vw, 54px);
+  margin-bottom: clamp(40px, 6vw, 90px);
 }
 
 .project-grid {
@@ -154,8 +159,13 @@ button span {
 }
 
 .project-img {
-  height: 320px;
+  height: clamp(200px, 24vw, 320px);
   background: #e8e8e8;
+}
+
+.project-grid.dark .project-card:nth-child(n + 4) .project-img {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
 }
 
 .project-card h3 {
@@ -174,15 +184,15 @@ button span {
 }
 
 .story-section {
-  padding: 120px 10%;
+  padding: clamp(60px, 9vw, 120px) 10%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: clamp(30px, 5vw, 80px);
 }
 
 .story-section h2,
 .about-page h1 {
-  font-size: 64px;
+  font-size: clamp(36px, 5vw, 64px);
   line-height: 0.95;
 }
 
@@ -194,11 +204,11 @@ button span {
 
 .footer {
   border-top: 1px solid #83989a;
-  margin: 80px 6% 40px;
+  margin: clamp(40px, 6vw, 80px) 6% 40px;
   padding-top: 24px;
   display: flex;
   justify-content: space-between;
-  font-size: 18px;
+  font-size: clamp(14px, 1.2vw, 18px);
   line-height: 1.5;
 }
 
@@ -211,27 +221,18 @@ button span {
 }
 
 .page {
-  padding: 90px 8%;
+  padding: clamp(40px, 7vw, 90px) 8%;
 }
 
 .page-title.center {
   text-align: center;
-  margin-bottom: 90px;
-  font-size: 36px;
+  margin-bottom: clamp(40px, 6vw, 90px);
+  font-size: clamp(24px, 3vw, 36px);
 }
 
-.about-page,
 .detail-page {
-  padding: 110px 10%;
-  min-height: 900px;
-}
-
-.contact-page {
-  padding: 60px 10%;
-}
-
-.contact-page + .footer {
-  margin: 40px 6% 24px;
+  padding: clamp(50px, 8vw, 110px) 10%;
+  min-height: clamp(500px, 80vh, 900px);
 }
 
 .about-page h1 {
@@ -240,14 +241,40 @@ button span {
 
 .about-text {
   max-width: 1200px;
-  font-size: 18px;
+  font-size: clamp(16px, 1.3vw, 18px);
   line-height: 1.5;
+}
+
+/* About and Contact pages fill the remaining viewport height dynamically,
+   so they never need to scroll regardless of screen size. */
+.contact-screen,
+.about-screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-page,
+.about-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(16px, 3.5vh, 60px) 10%;
+}
+
+.about-screen .footer {
+  margin: clamp(16px, 3vh, 40px) 6% clamp(16px, 3vh, 40px);
+}
+
+.contact-screen .footer {
+  margin: clamp(16px, 3vh, 40px) 6% clamp(16px, 3vh, 40px);
 }
 
 .contact-page h1 {
   color: #45b8b2;
-  font-size: 54px;
-  margin-bottom: 50px;
+  font-size: clamp(32px, 4.5vw, 54px);
+  margin-bottom: clamp(16px, 3.5vh, 50px);
 }
 
 .contact-form {
@@ -262,18 +289,18 @@ input {
   border: none;
   background: #d5fbf8;
   border-radius: 14px;
-  padding: 28px;
-  font-size: 26px;
+  padding: clamp(18px, 2.2vw, 28px);
+  font-size: clamp(18px, 2vw, 26px);
   font-family: inherit;
 }
 
 textarea {
-  height: 255px;
+  height: clamp(160px, 26vh, 280px);
   resize: none;
 }
 
 input {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 .form-buttons {
@@ -286,12 +313,12 @@ button {
   background: white;
   border-radius: 999px;
   padding: 10px 14px 10px 24px;
-  font-size: 30px;
+  font-size: clamp(20px, 2.2vw, 30px);
   font-family: inherit;
 }
 
 .detail-page h1 {
-  font-size: 46px;
+  font-size: clamp(28px, 4vw, 46px);
   margin: 18px 0;
 }
 
@@ -300,7 +327,7 @@ button {
 }
 
 .large-img {
-  height: 520px;
+  height: clamp(280px, 38vw, 520px);
   background: #e8e8e8;
   margin-top: 42px;
 }

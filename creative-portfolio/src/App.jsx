@@ -12,11 +12,11 @@ const projects = [
   { title: "Nexora Systems", type: "Logo" },
 ];
 
-function Navbar() {
+function Navbar({ merged }) {
   const path = window.location.pathname;
 
   return (
-    <nav className="navbar">
+    <nav className={merged ? "navbar navbar--merged" : "navbar"}>
       <img src="/logo.png" alt="Undo Culture" className="logo" />
 
       <div className="nav-links">
@@ -61,7 +61,7 @@ function Footer() {
 function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar merged />
 
       <section className="hero-box">
         <div>
@@ -167,7 +167,7 @@ function Projects() {
 
 function About() {
   return (
-    <>
+    <div className="about-screen">
       <Navbar />
 
       <main className="about-page">
@@ -188,13 +188,13 @@ function About() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
 
 function Contact() {
   return (
-    <>
+    <div className="contact-screen">
       <Navbar />
 
       <main className="contact-page">
@@ -220,7 +220,7 @@ function Contact() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
 
