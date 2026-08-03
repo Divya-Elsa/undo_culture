@@ -81,20 +81,26 @@ function Home() {
       </section>
 
       <section className="marquee">
-        <div>
+        <div className="marquee-track">
           <span>BETWEEN BUNS</span>
           <span>BETWEEN BUNS</span>
           <span>BETWEEN BUNS</span>
           <span>BETWEEN BUNS</span>
           <span>BETWEEN BUNS</span>
+          <span aria-hidden="true">BETWEEN BUNS</span>
+          <span aria-hidden="true">BETWEEN BUNS</span>
+          <span aria-hidden="true">BETWEEN BUNS</span>
+          <span aria-hidden="true">BETWEEN BUNS</span>
+          <span aria-hidden="true">BETWEEN BUNS</span>
         </div>
       </section>
 
       <section className="intro-text">
         <p>
-          We are a creative design agency committed to crafting impactful visual
-          experiences and delivering diverse design solutions that build
-          memorable brands across the globe.
+          We are a <strong>creative design agency</strong> committed to crafting
+          impactful visual experiences and delivering diverse{" "}
+          <strong>design solutions</strong> that build memorable brands across
+          the globe.
         </p>
       </section>
 
