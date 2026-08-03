@@ -23,6 +23,25 @@ a {
   text-decoration: none;
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 h1,
 h2,
 h3,
@@ -151,6 +170,30 @@ button span {
   margin-left: 8px;
 }
 
+.icon-pop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: icon-pop 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+}
+
+@keyframes icon-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .hero-box {
   width: calc(100% - 48px);
   margin: 0 auto 28px;
@@ -246,11 +289,21 @@ button span {
 
 .project-card {
   text-align: left;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
 }
 
 .project-img {
   height: clamp(200px, 24vw, 320px);
   background: #e8e8e8;
+  transition: transform 0.4s ease;
+}
+
+.project-card:hover .project-img {
+  transform: scale(1.03);
 }
 
 .project-grid.dark .project-card:nth-child(n + 4) .project-img {
@@ -273,6 +326,15 @@ button span {
   color: white;
 }
 
+.view-more .arrow-down {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.view-more:hover .arrow-down {
+  transform: translateY(4px);
+}
+
 .story-section {
   padding: clamp(60px, 9vw, 120px) 10%;
   display: grid;
@@ -290,6 +352,15 @@ button span {
   display: inline-block;
   margin-top: 20px;
   color: #6c8688;
+}
+
+.story-section a .arrow-right {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.story-section a:hover .arrow-right {
+  transform: translateX(4px);
 }
 
 .footer {
@@ -363,14 +434,14 @@ button span {
 
 .contact-page h1 {
   color: #45b8b2;
-  font-size: clamp(32px, 4.5vw, 54px);
+  font-size: clamp(28px, 4vw, 48px);
   margin-bottom: clamp(16px, 3.5vh, 50px);
 }
 
 .contact-form {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 34px;
+  gap: 26px;
 }
 
 textarea,
@@ -379,13 +450,13 @@ input {
   border: none;
   background: #d5fbf8;
   border-radius: 14px;
-  padding: clamp(18px, 2.2vw, 28px);
-  font-size: clamp(18px, 2vw, 26px);
+  padding: clamp(14px, 1.8vw, 22px);
+  font-size: clamp(16px, 1.6vw, 21px);
   font-family: inherit;
 }
 
 textarea {
-  height: clamp(160px, 26vh, 280px);
+  height: clamp(140px, 22vh, 230px);
   resize: none;
 }
 
@@ -393,18 +464,19 @@ input {
   margin-bottom: 14px;
 }
 
-.form-buttons {
-  display: flex;
-  gap: 16px;
-}
-
 button {
   border: 2px solid #062f31;
   background: white;
   border-radius: 999px;
-  padding: 10px 14px 10px 24px;
-  font-size: clamp(20px, 2.2vw, 30px);
+  padding: 8px 12px 8px 20px;
+  font-size: clamp(17px, 1.8vw, 24px);
   font-family: inherit;
+  transition: opacity 0.2s ease;
+}
+
+button.sent {
+  cursor: default;
+  opacity: 0.85;
 }
 
 .detail-page h1 {

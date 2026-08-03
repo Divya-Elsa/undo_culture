@@ -1,4 +1,49 @@
+import { useState, useEffect, useRef } from "react";
+import emailjs from "@emailjs/browser";
 import "./App.css";
+
+const EMAILJS_SERVICE_ID = "service_rfu3tab";
+const EMAILJS_TEMPLATE_ID = "template_en4eirk";
+const EMAILJS_PUBLIC_KEY = "eP8xmdR5s-1-sskSY";
+
+function useInView() {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, inView];
+}
+
+function Reveal({ as: Tag = "div", className = "", children, ...rest }) {
+  const [ref, inView] = useInView();
+
+  return (
+    <Tag
+      ref={ref}
+      className={`reveal${inView ? " in-view" : ""}${className ? ` ${className}` : ""}`}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+}
 
 const projects = [
   { title: "Kopi Sippio", type: "Branding" },
@@ -111,7 +156,7 @@ function Home() {
         </ul>
       </section>
 
-      <section className="marquee">
+      <Reveal as="section" className="marquee">
         <div className="marquee-track">
           <span>BETWEEN BUNS</span>
           <span>BETWEEN BUNS</span>
@@ -124,16 +169,16 @@ function Home() {
           <span aria-hidden="true">BETWEEN BUNS</span>
           <span aria-hidden="true">BETWEEN BUNS</span>
         </div>
-      </section>
+      </Reveal>
 
-      <section className="intro-text">
+      <Reveal as="section" className="intro-text">
         <p>
           We are a <strong>creative design agency</strong> committed to crafting
           impactful visual experiences and delivering diverse{" "}
           <strong>design solutions</strong> that build memorable brands across
           the globe.
         </p>
-      </section>
+      </Reveal>
 
       <section className="featured-projects">
         <p>Projects</p>
@@ -141,20 +186,25 @@ function Home() {
 
         <div className="project-grid dark">
           {projects.slice(0, 6).map((project, index) => (
-            <div className="project-card" key={index}>
+            <Reveal
+              as="div"
+              className="project-card"
+              key={index}
+              style={{ transitionDelay: `${(index % 3) * 100}ms` }}
+            >
               <div className="project-img"></div>
               <h3>{project.title}</h3>
               <p>{project.type}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
 
         <a className="view-more" href="/projects">
-          View More ↓
+          View More <span className="arrow-down">↓</span>
         </a>
       </section>
 
-      <section className="story-section">
+      <Reveal as="section" className="story-section">
         <div>
           <p>Projects</p>
           <h2>
@@ -169,9 +219,11 @@ function Home() {
             Lorem ipsum dolor sit amet. Sit iste necessitatibus ut recusandae
             corrupti eos sunt officiis sit possimus vero?
           </p>
-          <a href="/about">Read About us →</a>
+          <a href="/about">
+            Read About us <span className="arrow-right">→</span>
+          </a>
         </div>
-      </section>
+      </Reveal>
 
       <Footer />
     </>
@@ -188,11 +240,16 @@ function Projects() {
 
         <div className="project-grid">
           {projects.map((project, index) => (
-            <div className="project-card" key={index}>
+            <Reveal
+              as="div"
+              className="project-card"
+              key={index}
+              style={{ transitionDelay: `${(index % 3) * 100}ms` }}
+            >
               <div className="project-img"></div>
               <h3>{project.title}</h3>
               <p>{project.type}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </main>
@@ -207,7 +264,7 @@ function About() {
     <div className="about-screen">
       <Navbar />
 
-      <main className="about-page">
+      <Reveal as="main" className="about-page">
         <p className="label">About</p>
         <h1>
           Designs that
@@ -222,7 +279,7 @@ function About() {
           to create designs that are visually distinctive and emotionally
           memorable.
         </p>
-      </main>
+      </Reveal>
 
       <Footer />
     </div>
@@ -230,6 +287,8 @@ function About() {
 }
 
 function Contact() {
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+
   return (
     <div className="contact-screen">
       <Navbar />
@@ -237,21 +296,64 @@ function Contact() {
       <main className="contact-page">
         <h1>Get in touch.</h1>
 
-        <form className="contact-form">
-          <textarea placeholder="Tell what you need us to create...*" />
+        <form
+          className="contact-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            const form = e.target;
+            const message = form.message.value;
+            const email = form.email.value;
+            const phone = form.phone.value;
+
+            setStatus("sending");
+
+            emailjs
+              .send(
+                EMAILJS_SERVICE_ID,
+                EMAILJS_TEMPLATE_ID,
+                {
+                  title: phone,
+                  name: phone,
+                  time: new Date().toLocaleString(),
+                  message,
+                  email,
+                },
+                { publicKey: EMAILJS_PUBLIC_KEY }
+              )
+              .then(() => {
+                form.reset();
+                setStatus("sent");
+                setTimeout(() => setStatus("idle"), 3000);
+              })
+              .catch((err) => {
+                console.error("EmailJS send failed:", err);
+                setStatus("error");
+                setTimeout(() => setStatus("idle"), 3000);
+              });
+          }}
+        >
+          <textarea name="message" placeholder="Tell what you need us to create...*" />
 
           <div>
-            <input type="email" placeholder="email*" />
-            <input type="text" placeholder="phone number" />
+            <input type="email" name="email" placeholder="email*" required />
+            <input type="text" name="phone" placeholder="phone number" />
 
-            <div className="form-buttons">
-              <button type="button">
-                Send <span>→</span>
-              </button>
-              <button type="button">
-                Sent <span>✓</span>
-              </button>
-            </div>
+            <button
+              type="submit"
+              className={status === "sent" ? "sent" : ""}
+              disabled={status === "sending"}
+            >
+              {status === "sending"
+                ? "Sending..."
+                : status === "sent"
+                  ? "Sent"
+                  : status === "error"
+                    ? "Try again"
+                    : "Send"}{" "}
+              <span key={status} className="icon-pop">
+                {status === "sent" ? "✓" : "→"}
+              </span>
+            </button>
           </div>
         </form>
       </main>
@@ -274,10 +376,14 @@ function ProjectDetail() {
           corrupti eos sunt officiis sit possimus vero?
         </p>
 
-        <div className="large-img"></div>
-        <div className="large-img"></div>
-        <div className="large-img"></div>
-        <div className="large-img"></div>
+        {[0, 1, 2, 3].map((i) => (
+          <Reveal
+            as="div"
+            className="large-img"
+            key={i}
+            style={{ transitionDelay: `${i * 100}ms` }}
+          />
+        ))}
       </main>
 
       <Footer />
