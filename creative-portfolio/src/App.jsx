@@ -52,7 +52,31 @@ function Footer() {
       <div className="footer-right">
         <p>+91 9544284196</p>
         <p>undoculture@gmail.com</p>
-        <p>Instagram&nbsp; LinkedIn&nbsp; Behance</p>
+        <p>
+          <a
+            href="https://www.instagram.com/undoculture/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+          </a>
+          &nbsp;{" "}
+          <a
+            href="https://www.linkedin.com/company/undoculture/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+          &nbsp;{" "}
+          <a
+            href="https://www.behance.net/undo-culture"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Behance
+          </a>
+        </p>
       </div>
     </footer>
   );
