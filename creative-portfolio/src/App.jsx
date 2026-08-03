@@ -30,7 +30,14 @@ function Navbar({ merged }) {
           Projects
         </a>
         <a href="/contact" className="contact-btn">
-          Get in touch <span>→</span>
+          <span className="circle" aria-hidden="true"></span>
+          <span className="arr-1" aria-hidden="true">
+            →
+          </span>
+          <span className="btn-text">Get in touch</span>
+          <span className="arr-2" aria-hidden="true">
+            →
+          </span>
         </a>
       </div>
     </nav>

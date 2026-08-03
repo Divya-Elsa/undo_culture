@@ -1,16 +1,39 @@
-# React + Vite
+# Undo Culture — Creative Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Marketing site for Undo Culture, a creative design agency. Built with React and Vite.
 
-Currently, two official plugins are available:
+## Pages
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Home** (`/`) — hero, scrolling client marquee, intro, featured projects, and a story teaser
+- **About** (`/about`)
+- **Projects** (`/projects`)
+- **Project detail** (`/project/between-buns`)
+- **Contact** (`/contact`) — inquiry form
 
-## React Compiler
+Routing is handled with a simple `window.location.pathname` check in `src/App.jsx` (no router library).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Other scripts: `npm run build`, `npm run preview`, `npm run lint`.
+
+## Fonts
+
+- **Figtree** (headings) is loaded from Google Fonts in `index.html`.
+- **Mark Pro** (body text) is a licensed commercial font, not included in this repo. Place the font file(s) in `public/fonts/` locally — that folder is gitignored so the licensed font is never pushed to this public repository. Without it, body text falls back to Arial.
+
+## Structure
+
+```
+src/
+  App.jsx      # all pages/components
+  App.css      # all styling
+  main.jsx     # entry point
+public/
+  fonts/       # local-only licensed fonts (gitignored)
+  logo.png, icons.svg, favicon.svg
+```
