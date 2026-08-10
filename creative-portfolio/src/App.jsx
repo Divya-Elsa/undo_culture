@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import emailjs from "@emailjs/browser";
 import { supabase } from "./lib/supabaseClient";
+import Admin from "./Admin";
 import "./App.css";
 
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -480,6 +481,8 @@ function ProjectDetail({ slug }) {
 
 function App() {
   const path = window.location.pathname;
+
+  if (path === "/admin") return <Admin />;
 
   let page;
   if (path === "/about") {

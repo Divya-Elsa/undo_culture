@@ -599,3 +599,179 @@ button.sent {
     text-align: left;
   }
 }
+
+/* Admin */
+
+.admin-login {
+  max-width: 360px;
+  margin: 140px auto;
+  padding: 0 24px;
+}
+
+.admin-login h1 {
+  font-size: 32px;
+  margin-bottom: 24px;
+}
+
+.admin-login form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+}
+
+.admin-list-title {
+  font-weight: 600;
+  flex: 1;
+}
+
+.admin-list-type {
+  color: #27bdb8;
+}
+
+.admin-list-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-login input,
+.admin-form input,
+.admin-form textarea {
+  width: 100%;
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.admin-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.admin-login button,
+.admin-form button,
+.admin-list button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: #062f31;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.admin-form-actions button[type="button"],
+.admin-header-actions button {
+  background: transparent;
+  color: #062f31;
+  border: 1px solid #062f31;
+}
+
+.admin-error {
+  color: #c0392b;
+  font-size: 14px;
+}
+
+.admin-existing-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-thumb img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.error-fallback {
+  max-width: 420px;
+  margin: 160px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.error-fallback h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.error-fallback p {
+  margin-bottom: 24px;
+  color: #555;
+}
+
+.error-fallback button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 24px;
+  background: #062f31;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
