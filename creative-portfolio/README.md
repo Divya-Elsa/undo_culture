@@ -67,6 +67,8 @@ create policy "auth write projects" on projects for all
 create policy "public read project_images" on project_images for select using (true);
 create policy "auth write project_images" on project_images for all
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+create index idx_project_images_project_id on project_images (project_id);
 ```
 
 Then create a public **Storage** bucket named `project-images`, and add:
@@ -96,6 +98,7 @@ Staff logins are created manually via **Authentication → Users → Add user** 
 src/
   App.jsx              # public pages/components + routing
   Admin.jsx            # /admin login + project CRUD dashboard
+  ErrorBoundary.jsx    # catches render crashes, shows a fallback instead of a blank page
   App.css              # all styling
   main.jsx             # entry point
   lib/
