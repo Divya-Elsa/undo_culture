@@ -1,10 +1,48 @@
 import { useState, useEffect, useRef } from "react";
 import emailjs from "@emailjs/browser";
+import { supabase } from "./lib/supabaseClient";
 import "./App.css";
 
-const EMAILJS_SERVICE_ID = "service_rfu3tab";
-const EMAILJS_TEMPLATE_ID = "template_en4eirk";
-const EMAILJS_PUBLIC_KEY = "eP8xmdR5s-1-sskSY";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+function useProjects() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    supabase
+      .from("projects")
+      .select("*, project_images(url, position)")
+      .order("position", { ascending: true })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          console.error("Failed to load projects:", error);
+          setProjects([]);
+        } else {
+          setProjects(
+            (data || []).map((project) => ({
+              ...project,
+              images: (project.project_images || [])
+                .slice()
+                .sort((a, b) => a.position - b.position),
+            }))
+          );
+        }
+        setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { projects, loading };
+}
 
 function useInView() {
   const ref = useRef(null);
@@ -44,18 +82,6 @@ function Reveal({ as: Tag = "div", className = "", children, ...rest }) {
     </Tag>
   );
 }
-
-const projects = [
-  { title: "Kopi Sippio", type: "Branding" },
-  { title: "Between Buns", type: "Branding" },
-  { title: "Nexora Systems", type: "Logo" },
-  { title: "Kopi Sippio", type: "Branding" },
-  { title: "Between Buns", type: "Branding" },
-  { title: "Nexora Systems", type: "Logo" },
-  { title: "Kopi Sippio", type: "Branding" },
-  { title: "Between Buns", type: "Branding" },
-  { title: "Nexora Systems", type: "Logo" },
-];
 
 function Navbar({ merged }) {
   const path = window.location.pathname;
@@ -135,6 +161,8 @@ function Footer() {
 }
 
 function Home() {
+  const { projects, loading } = useProjects();
+
   return (
     <>
       <Navbar merged />
@@ -184,20 +212,29 @@ function Home() {
         <p>Projects</p>
         <h2>We did these</h2>
 
-        <div className="project-grid dark">
-          {projects.slice(0, 6).map((project, index) => (
-            <Reveal
-              as="div"
-              className="project-card"
-              key={index}
-              style={{ transitionDelay: `${(index % 3) * 100}ms` }}
-            >
-              <div className="project-img"></div>
-              <h3>{project.title}</h3>
-              <p>{project.type}</p>
-            </Reveal>
-          ))}
-        </div>
+        {!loading && projects.length === 0 ? (
+          <p className="projects-empty">More work coming soon.</p>
+        ) : (
+          <div className="project-grid dark">
+            {projects.slice(0, 6).map((project, index) => (
+              <Reveal
+                as="a"
+                href={`/projects/${project.slug}`}
+                className="project-card"
+                key={project.id}
+                style={{ transitionDelay: `${(index % 3) * 100}ms` }}
+              >
+                <div className="project-img">
+                  {project.cover_image_url && (
+                    <img src={project.cover_image_url} alt={project.title} />
+                  )}
+                </div>
+                <h3>{project.title}</h3>
+                <p>{project.type}</p>
+              </Reveal>
+            ))}
+          </div>
+        )}
 
         <a className="view-more" href="/projects">
           View More <span className="arrow-down">↓</span>
@@ -231,6 +268,8 @@ function Home() {
 }
 
 function Projects() {
+  const { projects, loading } = useProjects();
+
   return (
     <>
       <Navbar />
@@ -238,20 +277,29 @@ function Projects() {
       <main className="page">
         <h1 className="page-title center">Projects</h1>
 
-        <div className="project-grid">
-          {projects.map((project, index) => (
-            <Reveal
-              as="div"
-              className="project-card"
-              key={index}
-              style={{ transitionDelay: `${(index % 3) * 100}ms` }}
-            >
-              <div className="project-img"></div>
-              <h3>{project.title}</h3>
-              <p>{project.type}</p>
-            </Reveal>
-          ))}
-        </div>
+        {!loading && projects.length === 0 ? (
+          <p className="projects-empty">More work coming soon.</p>
+        ) : (
+          <div className="project-grid">
+            {projects.map((project, index) => (
+              <Reveal
+                as="a"
+                href={`/projects/${project.slug}`}
+                className="project-card"
+                key={project.id}
+                style={{ transitionDelay: `${(index % 3) * 100}ms` }}
+              >
+                <div className="project-img">
+                  {project.cover_image_url && (
+                    <img src={project.cover_image_url} alt={project.title} />
+                  )}
+                </div>
+                <h3>{project.title}</h3>
+                <p>{project.type}</p>
+              </Reveal>
+            ))}
+          </div>
+        )}
       </main>
 
       <Footer />
@@ -363,27 +411,66 @@ function Contact() {
   );
 }
 
-function ProjectDetail() {
+function ProjectDetail({ slug }) {
+  // undefined = loading, null = not found, object = loaded
+  const [project, setProject] = useState(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    supabase
+      .from("projects")
+      .select("*, project_images(url, position)")
+      .eq("slug", slug)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error || !data) {
+          setProject(null);
+        } else {
+          setProject({
+            ...data,
+            images: (data.project_images || [])
+              .slice()
+              .sort((a, b) => a.position - b.position),
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
+
   return (
     <>
       <Navbar />
 
       <main className="detail-page">
-        <p className="label">Project</p>
-        <h1>Between Buns</h1>
-        <p>
-          Lorem ipsum dolor sit amet. Sit iste necessitatibus ut recusandae
-          corrupti eos sunt officiis sit possimus vero?
-        </p>
+        {project === undefined ? null : project === null ? (
+          <>
+            <p className="label">Project</p>
+            <h1>Not found</h1>
+            <p>This project doesn&apos;t exist or may have been removed.</p>
+          </>
+        ) : (
+          <>
+            <p className="label">Project</p>
+            <h1>{project.title}</h1>
+            <p>{project.description}</p>
 
-        {[0, 1, 2, 3].map((i) => (
-          <Reveal
-            as="div"
-            className="large-img"
-            key={i}
-            style={{ transitionDelay: `${i * 100}ms` }}
-          />
-        ))}
+            {project.images.map((img, i) => (
+              <Reveal
+                as="div"
+                className="large-img"
+                key={img.url}
+                style={{ transitionDelay: `${i * 100}ms` }}
+              >
+                <img src={img.url} alt={`${project.title} ${i + 1}`} />
+              </Reveal>
+            ))}
+          </>
+        )}
       </main>
 
       <Footer />
@@ -394,12 +481,19 @@ function ProjectDetail() {
 function App() {
   const path = window.location.pathname;
 
-  if (path === "/about") return <About />;
-  if (path === "/projects") return <Projects />;
-  if (path === "/contact") return <Contact />;
-  if (path === "/project/between-buns") return <ProjectDetail />;
+  let page;
+  if (path === "/about") {
+    page = <About />;
+  } else if (path === "/projects") {
+    page = <Projects />;
+  } else if (path === "/contact") {
+    page = <Contact />;
+  } else {
+    const projectMatch = path.match(/^\/projects\/([^/]+)\/?$/);
+    page = projectMatch ? <ProjectDetail slug={projectMatch[1]} /> : <Home />;
+  }
 
-  return <Home />;
+  return <div className="page-transition">{page}</div>;
 }
 
 export default App;
