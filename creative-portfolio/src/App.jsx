@@ -244,7 +244,7 @@ function Home() {
 
       <Reveal as="section" className="story-section">
         <div>
-          <p>Projects</p>
+          <p className="story-eyebrow">About</p>
           <h2>
             Designs that
             <br />
@@ -253,7 +253,10 @@ function Home() {
         </div>
 
         <div>
-          <p>
+          <p className="story-eyebrow story-spacer" aria-hidden="true">
+            &nbsp;
+          </p>
+          <p className="story-text">
             Lorem ipsum dolor sit amet. Sit iste necessitatibus ut recusandae
             corrupti eos sunt officiis sit possimus vero?
           </p>

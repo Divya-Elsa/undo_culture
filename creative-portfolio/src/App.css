@@ -130,9 +130,20 @@ h3,
 .nav-links a.active,
 .label,
 .page-title,
-.featured-projects > p,
-.story-section > div > p {
+.featured-projects > p {
   color: #36dcd4;
+}
+
+.story-section .story-eyebrow {
+  color: #36dcd4;
+}
+
+.story-section .story-spacer {
+  visibility: hidden;
+}
+
+.story-section .story-text {
+  color: #052d2f;
 }
 
 .contact-btn {
