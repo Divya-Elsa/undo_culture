@@ -86,12 +86,25 @@ function Reveal({ as: Tag = "div", className = "", children, ...rest }) {
 
 function Navbar({ merged }) {
   const path = window.location.pathname;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className={merged ? "navbar navbar--merged" : "navbar"}>
       <img src="/logo.png" alt="Undo Culture" className="logo" />
 
-      <div className="nav-links">
+      <button
+        type="button"
+        className="nav-toggle"
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+        onClick={() => setMenuOpen((open) => !open)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <div className={`nav-links${menuOpen ? " nav-links--open" : ""}`}>
         <a href="/" className={path === "/" ? "active" : ""}>
           Home
         </a>
